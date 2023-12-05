@@ -2,9 +2,22 @@ import pandas as pd
 import math
 
 df = pd.read_csv('dec5.csv', header=0)
-print(df)
+num_cols = df.shape[1]
 
 master_map = {}
+
+# Starting with the last layer, we want to build up possible ranges of values in the next layer
+for i in range(num_cols):
+    current_col = num_cols - i - 1
+    master_map[current_col] = {}
+    current_layer = df.iloc[:, current_col][0].split()
+    current_start = int(current_layer[0])
+    prev_start = int(current_layer[1])
+    prev_range = int(current_layer[2])
+    prev_max = prev_start + prev_range
+    master_map[current_col][current_start] = [prev_start, prev_max]
+
+
 
 # First set up a nested dictionary - each layer of the map has its own dictionary.
 # For example, seed layer has a {seed value: soil value} mapping.
