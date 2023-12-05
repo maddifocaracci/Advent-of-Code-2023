@@ -27,7 +27,14 @@ for col in range(df.shape[1]):
                     # Add the object's value to our current map layer
                     master_map[col][dest_num] = []
         elif not math.isnan(key):
-            master_map[col][int(key)] = []
+            if i % 2 == 0:
+                # If we're on a seed number rather than a range
+                start_seed = int(key)
+                seed_range = int(df.iloc[i+1, col])
+                # Add a seed to the initial dict for every num in this range
+                for k in range(seed_range):
+                    seed_num = start_seed + k
+                    master_map[col][seed_num] = []
     if col > 0:
         # If one of the items in our previous layer has no mapping, give it same number in current layer
         for item in master_map[col-1]:
@@ -37,5 +44,9 @@ for col in range(df.shape[1]):
 
 # Grab the minimum value from the last layer.
 print(min(master_map[df.shape[1]-1]))
+
+# I literally cannot consider every seed. What I NEED to do is find possible ranges of seeds. I should do this by
+# working backwards. I find all the possible ranges of values in the previous layer. Work back until you get
+# to the seed layer.
 
 
